@@ -8,16 +8,16 @@
 
 int binary_tree_is_complete(const binary_tree_t *tree)
 {
+	int front = 0, rear = 0;
+	int isComplete = 1;
+	binary_tree_t **queue = queue;
+
 	if (tree == NULL)
 	{
 		return (0);
 	}
-	int isComplete = 1;
-
-	binary_tree_t **queue = queue;
 
 	queue = (binary_tree_t **)malloc(sizeof(binary_tree_t *) * 1000);
-	int front = 0, rear = 0;
 
 	queue[rear++] = (binary_tree_t *)tree;
 	while (front < rear)
