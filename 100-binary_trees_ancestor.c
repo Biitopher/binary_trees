@@ -10,6 +10,7 @@
 size_t depth(const binary_tree_t *node)
 {
 	size_t d = 0;
+
 	while (node)
 	{
 		d++;
