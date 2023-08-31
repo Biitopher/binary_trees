@@ -1,5 +1,5 @@
 #include "binary_trees.h"
-#include  "queue.h"
+#include "queue.h"
 
 /**
  * binary_tree_is_complete - checks if a binary tree is complete
@@ -9,40 +9,37 @@
 
 int binary_tree_is_complete(const binary_tree_t *tree)
 {
-	int front = 0, rear = 0;
-	int isComplete = 1;
-	binary_tree_t **queue = queue;
+	int flag = 0;
+	queue_t *queue;
+	const binary_tree_t *node;
 
 	if (tree == NULL)
-	{
 		return (0);
-	}
 
-	queue = (binary_tree_t **)malloc(sizeof(binary_tree_t *) * 1000);
+	queue = queue_create();
+	if (queue == NULL)
+		return (0);
 
-	queue[rear++] = (binary_tree_t *)tree;
-	while (front < rear)
+	queue_push(queue, (void *)tree);
+	while (!queue_is_empty(queue))
 	{
-		binary_tree_t *node = queue[front++];
+		node = (const binary_tree_t *)queue_pop(queue);
 
 		if (node == NULL)
-		{
-			isComplete = 0;
-		}
+			flag = 1;
 		else
 		{
-			queue[rear++] = node->left;
-			queue[rear++] = node->right;
+			if (flag)
+			{
+				queue_delete(queue);
+				return (0);
+			}
+
+			queue_push(queue, (void *)(node->left));
+			queue_push(queue, (void *)(node->right));
 		}
 	}
-	while (rear > 0 && queue[rear - 1] == NULL)
-	{
-		rear--;
-	}
-	if (rear > 0)
-	{
-		isComplete = 0;
-	}
-	free(queue);
-	return (isComplete);
+
+	queue_delete(queue);
+	return (1);
 }
