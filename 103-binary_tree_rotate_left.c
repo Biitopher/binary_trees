@@ -9,15 +9,27 @@
 
 binary_tree_t *binary_tree_rotate_left(binary_tree_t *tree)
 {
+	binary_tree_t *node, *new;
+
 	if (tree == NULL || tree->right == NULL)
+		return (NULL);
+
+	node = tree->right;
+	new = node->left;
+	node->left = tree;
+	tree->right = new;
+	if (new != NULL)
+		new->parent = tree;
+	new = tree->parent;
+	tree->parent = node;
+	node->parent = new;
+	if (new != NULL)
 	{
-		return (tree);
+		if (new->left == tree)
+			new->left = node;
+		else
+			new->right = node;
 	}
 
-	binary_tree_t *new_root = tree->right;
-
-	tree->right = new_root->left;
-	new_root->left = tree;
-
-	return (new_root);
+	return (node);
 }
