@@ -10,12 +10,15 @@
 bst_t *bst_insert(bst_t **tree, int value)
 {
 	bst_t *current = *tree;
-	bst_t *new_node = malloc(sizeof(bst_t));
+	bst_t *new_node = binary_tree_node(NULL, value);
 
 	if (!new_node)
 	{
 		return (NULL);
 	}
+	if (tree == NULL)
+		return (NULL);
+
 	new_node->n = value;
 	new_node->left = NULL;
 	new_node->right = NULL;
