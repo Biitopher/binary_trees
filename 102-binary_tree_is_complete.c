@@ -9,14 +9,14 @@
 
 int binary_tree_is_complete(const binary_tree_t *tree)
 {
+	int queue_size = 100;
+	binary_tree_t *queue[queue_size];
+	int front = 0, rear = 0;
+
 	if (tree == NULL)
 	{
 		return (0);
 	}
-
-	int queue_size = 100;
-	binary_tree_t *queue[queue_size];
-	int front = 0, rear = 0;
 
 	queue[rear++] = (binary_tree_t *)tree;
 
