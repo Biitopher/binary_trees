@@ -9,40 +9,35 @@
 
 int binary_tree_is_complete(const binary_tree_t *tree)
 {
-	int front = 0, rear = 0;
-	int isComplete = 1;
-	binary_tree_t **queue = NULL;
+	if (tree == NULL) {
+        return 0;
+    }
 
-	if (tree == NULL)
-	{
-		return (0);
-	}
+    int queue_size = 100;
+    binary_tree_t *queue[queue_size];
+    int front = 0, rear = 0;
 
-	queue = (binary_tree_t **)malloc(sizeof(binary_tree_t)* 1000);
+    queue[rear++] = (binary_tree_t *)tree;
 
-	queue[rear++] = (binary_tree_t *)tree;
-	while (front < rear)
-	{
-		binary_tree_t *node = queue[front++];
+    while (front < rear) {
+        binary_tree_t *current = queue[front++];
 
-		if (node == NULL)
-		{
-			isComplete = 0;
-		}
-		else
-		{
-			queue[rear++] = node->left;
-			queue[rear++] = node->right;
-		}
-	}
-	while (rear > 0 && queue[rear - 1] == NULL)
-	{
-		rear--;
-	}
-	if (rear > 0)
-	{
-		isComplete = 0;
-	}
-	free(queue);
-	return (isComplete);
+        if (current == NULL) {
+            while (front < rear && queue[front] == NULL) {
+                front++;
+            }
+            if (front < rear) {
+                return 0;
+            }
+        } else {
+            queue[rear++] = current->left;
+            queue[rear++] = current->right;
+        }
+
+        if (rear >= queue_size) {
+            return -1;
+        }
+    }
+
+    return 1;
 }
