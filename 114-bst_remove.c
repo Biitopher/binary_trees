@@ -1,67 +1,63 @@
 #include "binary_trees.h"
 
-/**
- * find_min - finds minimum value
- * @node: node being searched
- * Return: node on success
- */
-
-bst_t *find_min(bst_t *node)
-{
-	while (node->left != NULL)
-	{
-		node = node->left;
-	}
-	return (node);
-}
-
-
-/**
- * bst_remove - removes a node from a Binary Search Tree
- * @root: pointer to root node of tree where you remove node
- * @value: value to remove from tree
- * Return: pointer to new node
- */
+bst_t *bst_find_min(bst_t *node);
+bst_t *bst_remove_recursive(bst_t *root, int value);
 
 bst_t *bst_remove(bst_t *root, int value)
 {
+    if (root == NULL)
+        return NULL;
+
+    return bst_remove_recursive(root, value);
+}
+
+bst_t *bst_remove_recursive(bst_t *root, int value)
+{
 	bst_t *temp;
 
-	if (root == NULL)
-	{
-		return (NULL);
-	}
+    if (root == NULL)
+        return root;
 
-	if (value < root->n)
-	{
-		root->left = bst_remove(root->left, value);
-	}
-	else if (value > root->n)
-	{
-		root->right = bst_remove(root->right, value);
-	}
-	else
-	{
-		if (root->left == NULL)
-		{
-			temp = root->right;
+    if (value < root->n)
+    {
+        root->left = bst_remove_recursive(root->left, value);
+    }
+    else if (value > root->n)
+    {
+        root->right = bst_remove_recursive(root->right, value);
+    }
+    else
+    {
+        if (root->left == NULL)
+        {
+            bst_t *temp = root->right;
+            free(root);
+            return temp;
+        }
+        else if (root->right == NULL)
+        {
+            bst_t *temp = root->left;
+            free(root);
+            return temp;
+        }
 
-			free(root);
-			return (temp);
-		}
-		else if (root->right == NULL)
-		{
-			temp = root->left;
+        temp = bst_find_min(root->right);
 
-			free(root);
-			return (temp);
-		}
+        root->n = temp->n;
+        root->right = bst_remove_recursive(root->right, temp->n);
+    }
 
-		temp = find_min(root->right);
+    return root;
+}
 
-		root->n = temp->n;
-		root->right = bst_remove(root->right, temp->n);
-	}
+bst_t *bst_find_min(bst_t *node)
+{
+    bst_t *current = node;
 
-	return (root);
+    while (current && current->left != NULL)
+    {
+        current = current->left;
+    }
+
+    return current;
 }
